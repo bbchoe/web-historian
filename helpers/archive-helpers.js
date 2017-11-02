@@ -1,6 +1,8 @@
 var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
+var http = require('http');
+var httpHelpers = require(path.join(__dirname, '../web/http-helpers.js'));
 
 /*
  * You will need to reuse the same paths many times over in the course of this sprint.
@@ -56,4 +58,12 @@ exports.isUrlArchived = function(url, callback) {
 };
 
 exports.downloadUrls = function(urls) {
+  // urls = ['wwww.amazon.com', 'www.google.com', 'www.yahoo.com', 'www.yelp.com'];
+  for (let i = 0; i < urls.length; i++) {
+    httpHelpers.getAssets('https://' + urls[i]);
+  }
 };
+
+
+
+
