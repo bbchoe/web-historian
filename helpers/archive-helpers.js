@@ -32,6 +32,16 @@ exports.isUrlInList = function(url, callback) {
 };
 
 exports.addUrlToList = function(url, callback) {
+  console.log('here', exports.paths.list);
+  console.log('typeof ', typeof url);
+  console.log('url: ', url);
+  fs.appendFile(exports.paths.list, url + '\n', 'utf8', function (err) {
+    if (err) {
+      throw err;
+    }
+    callback();
+    console.log('saved!');
+  });
 };
 
 exports.isUrlArchived = function(url, callback) {
