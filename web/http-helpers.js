@@ -16,13 +16,15 @@ exports.serveAssets = function(res, asset, callback) {
   // Write some code here that helps serve up your static files!
   // (Static files are things like html (yours or archived from others...),
   // css, or anything that doesn't change often.)
+  var headers = exports.headers;
+  headers['Content-Type'] = 'text/html';
+  res.writeHead(200, headers);
+  res.write(asset);
+  res.end();
 };
 
+
 exports.getAssets = function(url, callback) {
-  console.log('------------IN HELPER FUNCTION----------------');
-  // input url
-  // return the assets from the url
-  console.log('---------URL--------', url);
   https.get(url, (res) => {
     console.log('---------IN GET----------');
     const statusCode = res.statusCode;

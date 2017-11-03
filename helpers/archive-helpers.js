@@ -44,13 +44,17 @@ exports.isUrlInList = function(url, callback) {
 };
 
 exports.addUrlToList = function(url, callback) {
+  // true or a false depending on if its in the archive
+  // send them to
+    // load page
+    // requested page
   fs.appendFile(exports.paths.list, url + '\n', 'utf8', function (err) {
     if (err) {
       console.log(err);
-    } else {
+    } else {                
       callback();
     }
-  });
+  });    
 };
 
 exports.isUrlArchived = function(url, callback) {
@@ -64,6 +68,19 @@ exports.downloadUrls = function(urls) {
   }
 };
 
+
+exports.pullAssets = function(url, res, callback) {
+  fs.readFile(exports.paths.archivedSites + '/' + url, 'utf8', (err, data) => {
+    if (err) { 
+      throw err; 
+    }
+    httpHelpers.serveAssets(res, data, callback);
+   
+    // res.writeHead(200, headers);
+    // res.write(data);
+    // res.end();
+  });
+};
 
 
 
