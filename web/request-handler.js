@@ -34,7 +34,7 @@ exports.handleRequest = function (req, res) {
       // handle valid URL request; has .com appended; has subdomain prefix
     } else if (req.url.slice(-4) === '.com') {
       console.log('----here----', req.url);
-      archive.isUrlArchived(req.url.slice(1), archive.pullAssets(url, res));
+      archive.pullAssets(req.url, res);
       
       // handle invalid requests
     } else {
@@ -52,23 +52,6 @@ exports.handleRequest = function (req, res) {
       archive.addUrlToList(url);
       res.writeHead(302, headers);
       res.end();
-
-      // archive.addUrlToList(url, (boolean) => {
-      //   if (boolean) {
-      //     // serve requested url
-      //   } else {
-      //     // serve loading page
-      //     fs.readFile(archive.paths.siteAssets + '/loading.html', 'utf8', (err, data) => {
-      //       if (err) { 
-      //         throw err; 
-      //       }
-      //       headers['Content-Type'] = 'text/html';
-      //       res.writeHead(200, headers);
-      //       res.write(data);
-      //       res.end();
-      //     });
-      //   }
-      // });
     });
   }
   

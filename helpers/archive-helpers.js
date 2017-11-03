@@ -51,8 +51,10 @@ exports.addUrlToList = function(url, callback) {
   fs.appendFile(exports.paths.list, url + '\n', 'utf8', function (err) {
     if (err) {
       console.log(err);
-    } else {                
-      callback();
+    } else {
+      if (callback !== undefined) {  
+        callback();
+      }                
     }
   });    
 };
@@ -70,15 +72,31 @@ exports.downloadUrls = function(urls) {
 
 
 exports.pullAssets = function(url, res, callback) {
-  fs.readFile(exports.paths.archivedSites + '/' + url, 'utf8', (err, data) => {
-    if (err) { 
-      throw err; 
+  console.log('starting in pull assets');
+  exports.isUrlArchived(url, (boolean) => {
+    if (boolean) {
+      fs.readFile(exports.paths.archivedSites + '/' + url, 'utf8', (err, data) => {
+        if (err) { 
+          throw err; 
+        }
+        console.log('----------in pull assets');
+        httpHelpers.serveAssets(res, data, callback);
+        // res.writeHead(200, headers);
+        // res.write(data);
+        // res.end();      
+      });    
+    } else {
+      console.log('deliver loading page');
+      fs.readFile(archive.paths.siteAssets + '/loading.html', 'utf8', (err, data) => {
+        if (err) { 
+          throw err; 
+        }
+        headers['Content-Type'] = 'text/html';
+        res.writeHead(200, headers);
+        res.write(data);
+        res.end();
+      });
     }
-    httpHelpers.serveAssets(res, data, callback);
-   
-    // res.writeHead(200, headers);
-    // res.write(data);
-    // res.end();
   });
 };
 

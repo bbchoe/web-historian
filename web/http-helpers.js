@@ -17,6 +17,7 @@ exports.serveAssets = function(res, asset, callback) {
   // (Static files are things like html (yours or archived from others...),
   // css, or anything that doesn't change often.)
   var headers = exports.headers;
+  console.log('asset --------------', asset);
   headers['Content-Type'] = 'text/html';
   res.writeHead(200, headers);
   res.write(asset);
@@ -26,7 +27,6 @@ exports.serveAssets = function(res, asset, callback) {
 
 exports.getAssets = function(url, callback) {
   https.get(url, (res) => {
-    console.log('---------IN GET----------');
     const statusCode = res.statusCode;
     const contentType = res.headers['content-type'];
     
@@ -49,7 +49,6 @@ exports.getAssets = function(url, callback) {
     });
     res.on('end', () => {
       try {
-        console.log('---------whats this---------', archive.paths.archivedSites + '/' + url.substring(8));
         fs.writeFile(archive.paths.archivedSites + '/' + url.substring(8), rawData, (err) => {
           if (err) {
             throw err;

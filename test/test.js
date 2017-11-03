@@ -68,7 +68,6 @@ describe('server', function() {
               var fileContents = fs.readFileSync(archive.paths.list, 'utf8');
               expect(fileContents).to.equal(url + '\n');
             }
-
             done(err);
           });
       });
