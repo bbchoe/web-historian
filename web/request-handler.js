@@ -41,7 +41,10 @@ exports.handleRequest = function (req, res) {
       res.writeHead(404, headers);
       res.end();
     }
+    
+    // handle POST requests
   } else if (req.method === 'POST') {
+    console.log('req.url ', req.url);
     let url = '';
     req.on('data', (chunk) => {
       url += chunk;
@@ -49,9 +52,9 @@ exports.handleRequest = function (req, res) {
     req.on('end', () => {
       url = url.slice(4);
       // figure out a way to append URL into the sites.txt
-      archive.addUrlToList(url);
-      res.writeHead(302, headers);
-      res.end();
+      archive.pullAssets(url, res);
+      // res.writeHead(302, headers);
+      // res.end();
     });
   }
   

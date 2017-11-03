@@ -60,7 +60,8 @@ exports.addUrlToList = function(url, callback) {
 };
 
 exports.isUrlArchived = function(url, callback) {
-  callback(fs.existsSync(exports.paths.archivedSites + '/' + url));
+  let isInFolder = fs.existsSync(exports.paths.archivedSites + '/' + url);
+  callback(isInFolder);
 };
 
 exports.downloadUrls = function(urls) {
@@ -70,29 +71,26 @@ exports.downloadUrls = function(urls) {
   }
 };
 
-
 exports.pullAssets = function(url, res, callback) {
-  console.log('starting in pull assets');
   exports.isUrlArchived(url, (boolean) => {
     if (boolean) {
       fs.readFile(exports.paths.archivedSites + '/' + url, 'utf8', (err, data) => {
         if (err) { 
           throw err; 
         }
-        console.log('----------in pull assets');
         httpHelpers.serveAssets(res, data, callback);
         // res.writeHead(200, headers);
         // res.write(data);
         // res.end();      
       });    
     } else {
-      console.log('deliver loading page');
-      fs.readFile(archive.paths.siteAssets + '/loading.html', 'utf8', (err, data) => {
+      // adding to sites.txt if doesnt exist
+      exports.addUrlToList(url);      
+      fs.readFile(exports.paths.siteAssets + '/loading.html', 'utf8', (err, data) => {
         if (err) { 
           throw err; 
         }
-        headers['Content-Type'] = 'text/html';
-        res.writeHead(200, headers);
+        res.writeHead(302, httpHelpers.headers);
         res.write(data);
         res.end();
       });
